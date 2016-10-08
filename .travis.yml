@@ -1,0 +1,40 @@
+language: cpp
+
+compiler: gcc
+env:
+  global:
+    - COMPILER=g++-4.9
+    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+    #   via the "travis encrypt" command using the project repo's public key
+    - secure: "loFBn048AuwfaBx4gBFXroKiIosX/tnQmeOinP1bjVUsWfuCRLORdcBOXtpohhiVKiesapQrABCWLKmcHxpK7BJKpY0YV16wGUTzv6S8E+ERBpUQ44WRpq9VNQ4mI94N6QWbsx42AqExzIuMGKvKSgPEpdswl1Erew4KXhrVCt79GM3UNtUA14ek2axOFs7ZwBG1NGVCO4aZYmd3aMgu0IQ9bQ8sL66SXn7+ShlbxeVBEZlmikVvOU+s8JoKVQlSvEytuQT3Z5xKk2tXzjxQQtgG8JUrLyD8XNsY39DkhW/f6TDYBp4y4uc7YhJ5yyvqVf4dxP5tM6/vGPHcLoAvYKv8d16wjFPUzcYZPhZcPDjRHucOAlE6kLEHx9d+qhZV4JKj4gmd2MgxH0fVGM73Qg3AP62Vy6lRX1bnWLk0njD0rQbLteUvy3RCGyrNeclhyVGldQFFdwjE/uzwVFQ0KqSPCSv3SIi2KnMo6/HGbER+2fvpJsCuXXy/y1tvzeWKX1C5k90OVp5donY7+VUsB8b3UMpU3O+/n+VF6Kr6lo6MB33bWzMPM5v3DqishR+aKxFQVEfCfoLFIbX+rOKyNsonvW9QlbFSDrdVdLEhYaFriUG2nP8Zwh4uGOx7KjlCBh1vfVFU1NKPc1vQUMYoZIV+pZ7q1KFlJ9TD1wc9WlM="
+
+services:
+  - mysql
+
+addons:
+  apt:
+    sources: ['ubuntu-toolchain-r-test']
+    packages: ['g++-4.9','valgrind']
+  coverity_scan:
+    project:
+      name: "FragJage/xPLDatabase"
+      description: "Log xPL message values into a database"
+    notification_email: inscrip.jage@free.fr
+    build_command_prepend: "cov-configure --comptype g++ --compiler $(which $COMPILER) && cmake . -G'Unix Makefiles' -DCMAKE_CXX_COMPILER=$(which $COMPILER)"
+    build_command: "make"
+    branch_pattern: coverity_branch
+    
+before_install:
+  - mysql -e "create database xPLDatabase;" -u root
+
+install:
+  - pip install --user git+git://github.com/eddyxu/cpp-coveralls.git
+
+script:
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $COMPILER); fi
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then make; fi
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then ./test/bin/unittest; fi
+
+after_success:
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then valgrind --error-exitcode=1 --leak-check=full ./test/bin/unittest; fi
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then coveralls --include src --gcov-options '\-lp' --gcov 'gcov-4.9'; fi

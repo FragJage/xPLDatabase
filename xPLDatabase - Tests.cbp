@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="xPLDatabase - Tests" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/xPLDatabase" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters="/Console" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="dependency" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="ws2_32" />
+					<Add library="dependency\mysql\lib\libmysql.lib" />
+				</Linker>
+			</Target>
+			<Target title="Debug">
+				<Option output="bin/xPLDatabase-Debug" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters="/Console" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+					<Add directory="dependency" />
+				</Compiler>
+				<Linker>
+					<Add library="ws2_32" />
+					<Add library="dependency\mysql\lib\libmysql.lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-DWIN32" />
+			<Add directory="dependency" />
+		</Compiler>
+		<Unit filename="dependency/MySQL/include/mysql.h" />
+		<Unit filename="dependency/Plateforms/Plateforms.cpp" />
+		<Unit filename="dependency/Plateforms/Plateforms.h" />
+		<Unit filename="dependency/SQLite/sqlite3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="dependency/SQLite/sqlite3.h" />
+		<Unit filename="dependency/SafeFunctions/SafeFunctions.cpp" />
+		<Unit filename="dependency/SafeFunctions/SafeFunctions.h" />
+		<Unit filename="dependency/Service/Service.cpp" />
+		<Unit filename="dependency/Service/Service.h" />
+		<Unit filename="dependency/SimpleFolders/SimpleFolders.cpp" />
+		<Unit filename="dependency/SimpleFolders/SimpleFolders.h" />
+		<Unit filename="dependency/SimpleIni/SimpleIni.cpp" />
+		<Unit filename="dependency/SimpleIni/SimpleIni.h" />
+		<Unit filename="dependency/SimpleLog/SimpleLog.cpp" />
+		<Unit filename="dependency/SimpleLog/SimpleLog.h" />
+		<Unit filename="dependency/SimpleLog/SimpleLog.inl" />
+		<Unit filename="dependency/SimpleSock/SimpleSock.h" />
+		<Unit filename="dependency/StringTools/StringTools.cpp" />
+		<Unit filename="dependency/StringTools/StringTools.h" />
+		<Unit filename="dependency/Thread/mingw.mutex.h" />
+		<Unit filename="dependency/UnitTest/UnitTest.cpp" />
+		<Unit filename="dependency/UnitTest/UnitTest.h" />
+		<Unit filename="dependency/UnitTest/termcolor.h" />
+		<Unit filename="dependency/xPLLib/Address.cpp" />
+		<Unit filename="dependency/xPLLib/Address.h" />
+		<Unit filename="dependency/xPLLib/Extensions/AdvanceConfig.cpp" />
+		<Unit filename="dependency/xPLLib/Extensions/AdvanceConfig.h" />
+		<Unit filename="dependency/xPLLib/Extensions/BasicConfig.cpp" />
+		<Unit filename="dependency/xPLLib/Extensions/BasicConfig.h" />
+		<Unit filename="dependency/xPLLib/Schemas/SchemaAdvanceConfig.cpp" />
+		<Unit filename="dependency/xPLLib/Schemas/SchemaAdvanceConfig.h" />
+		<Unit filename="dependency/xPLLib/Schemas/SchemaConfig.cpp" />
+		<Unit filename="dependency/xPLLib/Schemas/SchemaConfig.h" />
+		<Unit filename="dependency/xPLLib/Schemas/SchemaHbeat.cpp" />
+		<Unit filename="dependency/xPLLib/Schemas/SchemaHbeat.h" />
+		<Unit filename="dependency/xPLLib/Schemas/SchemaObject.cpp" />
+		<Unit filename="dependency/xPLLib/Schemas/SchemaObject.h" />
+		<Unit filename="dependency/xPLLib/Schemas/SchemaSensor.cpp" />
+		<Unit filename="dependency/xPLLib/Schemas/SchemaSensor.h" />
+		<Unit filename="dependency/xPLLib/xPLDevCfg.cpp" />
+		<Unit filename="dependency/xPLLib/xPLDevCfg.h" />
+		<Unit filename="dependency/xPLLib/xPLDevice.cpp" />
+		<Unit filename="dependency/xPLLib/xPLDevice.h" />
+		<Unit filename="src/CacheFile.cpp" />
+		<Unit filename="src/CacheFile.h" />
+		<Unit filename="src/CacheMemory.cpp" />
+		<Unit filename="src/CacheMemory.h" />
+		<Unit filename="src/DateHelper.cpp" />
+		<Unit filename="src/DateHelper.h" />
+		<Unit filename="src/DbMysql.cpp" />
+		<Unit filename="src/DbMysql.h" />
+		<Unit filename="src/DbSqlite.cpp" />
+		<Unit filename="src/DbSqlite.h" />
+		<Unit filename="src/Filter.cpp" />
+		<Unit filename="src/Filter.h" />
+		<Unit filename="src/ICache.h" />
+		<Unit filename="src/RequestValue.cpp" />
+		<Unit filename="src/RequestValue.h" />
+		<Unit filename="src/xPLDatabase.cpp" />
+		<Unit filename="src/xPLDatabase.h" />
+		<Unit filename="test/ControlSockMock.cpp" />
+		<Unit filename="test/ControlSockMock.h" />
+		<Unit filename="test/SimpleSockMock.cpp" />
+		<Unit filename="test/TestCacheFile.cpp" />
+		<Unit filename="test/TestCacheFile.h" />
+		<Unit filename="test/TestCacheMemory.cpp" />
+		<Unit filename="test/TestCacheMemory.h" />
+		<Unit filename="test/TestDateHelper.cpp" />
+		<Unit filename="test/TestDateHelper.h" />
+		<Unit filename="test/TestFilter.cpp" />
+		<Unit filename="test/TestFilter.h" />
+		<Unit filename="test/TestRequestValue.cpp" />
+		<Unit filename="test/TestRequestValue.h" />
+		<Unit filename="test/TestxPLDatabase.cpp" />
+		<Unit filename="test/TestxPLDatabase.h" />
+		<Unit filename="test/main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="2" line="2" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
