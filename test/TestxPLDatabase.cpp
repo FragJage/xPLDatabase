@@ -388,15 +388,15 @@ bool TestxPLDatabase::MySQLConfig()
     schCfg.SetValue("dbport", "3306");
     schCfg.SetValue("dbname", "xPLDatabase");
     schCfg.SetValue("dbuser", "root");
-    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.mysql");
-    ControlSockMock::SetNextRecv(msg);
+    schCfg.SetValue("newconf", "mysql");
 
+    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
+    ControlSockMock::SetNextRecv(msg);
     msg = ControlSockMock::GetLastSend(10);     //Pass Hbeat message
     msg = ControlSockMock::GetLastSend(10);
     sch.Parse(msg);
     assert("29"==sch.GetValue("interval"));
     assert("fragxpl-database.mysql"==sch.GetSource());
-
     msg = ControlSockMock::GetLastSend(10);
     sch.Parse(msg);
     assert("sensor"==sch.GetClass());
