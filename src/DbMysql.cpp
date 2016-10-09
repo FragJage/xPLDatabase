@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <stdexcept>
 #include <ctime>
 #include <iomanip>
@@ -80,7 +78,6 @@ bool DbMysql::Write(const string& canonic, const string& value, const time_t tim
 
     str << "INSERT INTO capteurs (id, dateheure, valeur) ";
     str << "VALUES ('"<<canonic<<"', '"<<toSQLDate(time)<<"', '"<<value<<"')";
-cout << "MYSQL : " << str.str() << endl;
     return Query(str.str());
 }
 
