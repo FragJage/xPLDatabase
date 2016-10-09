@@ -452,7 +452,7 @@ bool TestxPLDatabase::MySQLGetValues()
     msg = schData.ToMessage("fragxpl-test.default", "fragxpl-database.mysql");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(20);
+    msg = ControlSockMock::GetLastSend(50);
     sch.Parse(msg);
     assert("19.8"==sch.GetValue("value"));
     assert("19.8"==sch.GetValue("min"));
