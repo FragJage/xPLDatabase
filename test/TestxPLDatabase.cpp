@@ -379,16 +379,16 @@ bool TestxPLDatabase::MySQLConfig()
     xPL::SchemaObject schCfg(xPL::SchemaObject::cmnd, "config", "response");
 
 
+    schCfg.SetValue("newconf", "mysql");
     schCfg.SetValue("interval", "29");
     schCfg.SetValue("memorycachesize", "1");
     schCfg.SetValue("filecachesize", "");
     schCfg.SetValue("filecachename", "");
     schCfg.SetValue("dbtype", "MYSQL");
-    schCfg.SetValue("dbhost", "127.0.0.1");
     schCfg.SetValue("dbport", "3306");
+    schCfg.SetValue("dbhost", "127.0.0.1");
     schCfg.SetValue("dbname", "xPLDatabase");
     schCfg.SetValue("dbuser", "root");
-    schCfg.SetValue("newconf", "mysql");
 
     msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
