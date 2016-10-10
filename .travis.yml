@@ -21,22 +21,6 @@ addons:
       - gcc-4.9
       - g++-4.9
       - valgrind
-    alternatives:
-      - alternative:
-          name: gcc
-          link: /usr/bin/gcc
-          path: /usr/bin/gcc-4.9
-          priority: 90
-      - alternative:
-          name: g++
-          link: /usr/bin/g++
-          path: /usr/bin/g++-4.9
-          priority: 90
-      - alternative:
-          name: g++
-          link: /usr/bin/gcov
-          path: /usr/bin/gcov-4.9
-          priority: 90
   coverity_scan:
     project:
       name: "FragJage/xPLDatabase"
