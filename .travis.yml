@@ -47,8 +47,10 @@ addons:
     branch_pattern: coverity_branch
     
 before_install:
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90
+  - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.9 90
   - mysql -e "create database xPLDatabase;" -u root
-  - ls /usr/bin
 
 install:
   - pip install --user git+git://github.com/eddyxu/cpp-coveralls.git
