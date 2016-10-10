@@ -5,7 +5,8 @@ using namespace std;
 
 TestDateHelper::TestDateHelper() : TestClass("DateHelper", this)
 {
-	addTest("ToDate", &TestDateHelper::ToDate);
+	addTest("ToDate AAAA-MM-JJ", &TestDateHelper::ToDateAAAAMMJJ);
+	addTest("ToDate JJ/MM/AAAA", &TestDateHelper::ToDateJJMMAAAA);
 	addTest("ToString", &TestDateHelper::ToString);
 }
 
@@ -13,7 +14,7 @@ TestDateHelper::~TestDateHelper()
 {
 }
 
-bool TestDateHelper::ToDate()
+bool TestDateHelper::ToDateAAAAMMJJ()
 {
     time_t t1;
     struct tm *t2;
@@ -27,6 +28,20 @@ bool TestDateHelper::ToDate()
     assert(14==t2->tm_hour);
     assert(13==t2->tm_min);
     assert(12==t2->tm_sec);
+
+    return true;
+}
+
+bool TestDateHelper::ToDateJJMMAAAA()
+{
+    time_t t1;
+    struct tm *t2;
+
+    t1 = DateHelper::ToDate("24/07/2015 13:00:00");
+    t2 = localtime(&t1);
+    assert(115==t2->tm_year);
+    assert(6==t2->tm_mon);
+    assert(24==t2->tm_mday);
 
     return true;
 }

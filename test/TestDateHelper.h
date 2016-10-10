@@ -10,6 +10,7 @@ public:
     TestDateHelper();
     ~TestDateHelper();
 
-    bool ToDate();
+    bool ToDateAAAAMMJJ();
+    bool ToDateJJMMAAAA();
     bool ToString();
 };

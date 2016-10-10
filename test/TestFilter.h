@@ -11,5 +11,6 @@ public:
     ~TestFilter();
 
     bool SetAndGet();
+    bool SetPartial();
     bool Compare();
 };

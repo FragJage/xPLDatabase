@@ -274,7 +274,7 @@ bool TestxPLDatabase::GetValuesNum()
     msg = schData.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(20);
+    msg = ControlSockMock::GetLastSend(50);
     sch.Parse(msg);
     assert("25.4"==sch.GetValue("value"));
     assert("25"==sch.GetValue("min"));
@@ -284,7 +284,7 @@ bool TestxPLDatabase::GetValuesNum()
     msg = schData.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(20);
+    msg = ControlSockMock::GetLastSend(50);
     sch.Parse(msg);
     assert("25.4"==sch.GetValue("value"));
     assert("25"==sch.GetValue("min"));
@@ -305,7 +305,7 @@ bool TestxPLDatabase::GetValuesBool()
     msg = sch.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(20);
+    msg = ControlSockMock::GetLastSend(50);
     sch.Parse(msg);
     assert("1.0"==sch.GetValue("value"));
     assert("0"==sch.GetValue("min"));
@@ -327,11 +327,11 @@ bool TestxPLDatabase::GetValuesAlpha()
     msg = schData.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(20);
+    msg = ControlSockMock::GetLastSend(50);
     sch.Parse(msg);
     assert("loglogloglog0"==sch.GetValue("value"));
 
-    msg = ControlSockMock::GetLastSend(20);
+    msg = ControlSockMock::GetLastSend(50);
     sch.Parse(msg);
     assert("loglogloglog4"==sch.GetValue("value"));
 

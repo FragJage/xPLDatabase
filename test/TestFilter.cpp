@@ -6,6 +6,7 @@ using namespace std;
 TestFilter::TestFilter() : TestClass("Filter", this)
 {
 	addTest("SetAndGet", &TestFilter::SetAndGet);
+	addTest("SetPartial", &TestFilter::SetPartial);
 	addTest("Compare", &TestFilter::Compare);
 }
 
@@ -15,15 +16,38 @@ TestFilter::~TestFilter()
 
 bool TestFilter::SetAndGet()
 {
-    Filter myFilter;
-
-    myFilter.Set("xPLFrag-Test.default:lamp", "current");
+    Filter myFilter("xPLFrag-Test.default:lamp", "current");
 
     assert("xPLFrag" == myFilter.GetVendor());
     assert("Test" == myFilter.GetModule());
     assert("default" == myFilter.GetInstance());
     assert("lamp" == myFilter.GetDevice());
     assert("current" == myFilter.GetValueName());
+
+    return true;
+}
+
+bool TestFilter::SetPartial()
+{
+    Filter myFilter;
+
+    myFilter.Set("xPLFrag", "current");
+    assert("xPLFrag" == myFilter.GetVendor());
+    assert("*" == myFilter.GetModule());
+    assert("*" == myFilter.GetInstance());
+    assert("*" == myFilter.GetDevice());
+
+    myFilter.Set("xPLFrag-Test", "current");
+    assert("xPLFrag" == myFilter.GetVendor());
+    assert("Test" == myFilter.GetModule());
+    assert("*" == myFilter.GetInstance());
+    assert("*" == myFilter.GetDevice());
+
+    myFilter.Set("xPLFrag-Test.default", "current");
+    assert("xPLFrag" == myFilter.GetVendor());
+    assert("Test" == myFilter.GetModule());
+    assert("default" == myFilter.GetInstance());
+    assert("*" == myFilter.GetDevice());
 
     return true;
 }
