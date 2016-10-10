@@ -14,7 +14,7 @@ services:
 addons:
   apt:
     sources: ['ubuntu-toolchain-r-test']
-    packages: ['g++-4.9','gcov-4.9','valgrind']
+    packages: ['g++-4.9','lcov','valgrind']
   coverity_scan:
     project:
       name: "FragJage/xPLDatabase"
