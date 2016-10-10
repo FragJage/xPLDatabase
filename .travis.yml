@@ -8,6 +8,8 @@ env:
     #   via the "travis encrypt" command using the project repo's public key
     - secure: "loFBn048AuwfaBx4gBFXroKiIosX/tnQmeOinP1bjVUsWfuCRLORdcBOXtpohhiVKiesapQrABCWLKmcHxpK7BJKpY0YV16wGUTzv6S8E+ERBpUQ44WRpq9VNQ4mI94N6QWbsx42AqExzIuMGKvKSgPEpdswl1Erew4KXhrVCt79GM3UNtUA14ek2axOFs7ZwBG1NGVCO4aZYmd3aMgu0IQ9bQ8sL66SXn7+ShlbxeVBEZlmikVvOU+s8JoKVQlSvEytuQT3Z5xKk2tXzjxQQtgG8JUrLyD8XNsY39DkhW/f6TDYBp4y4uc7YhJ5yyvqVf4dxP5tM6/vGPHcLoAvYKv8d16wjFPUzcYZPhZcPDjRHucOAlE6kLEHx9d+qhZV4JKj4gmd2MgxH0fVGM73Qg3AP62Vy6lRX1bnWLk0njD0rQbLteUvy3RCGyrNeclhyVGldQFFdwjE/uzwVFQ0KqSPCSv3SIi2KnMo6/HGbER+2fvpJsCuXXy/y1tvzeWKX1C5k90OVp5donY7+VUsB8b3UMpU3O+/n+VF6Kr6lo6MB33bWzMPM5v3DqishR+aKxFQVEfCfoLFIbX+rOKyNsonvW9QlbFSDrdVdLEhYaFriUG2nP8Zwh4uGOx7KjlCBh1vfVFU1NKPc1vQUMYoZIV+pZ7q1KFlJ9TD1wc9WlM="
 
+sudo: required
+
 services:
   - mysql
 
@@ -46,6 +48,7 @@ addons:
     
 before_install:
   - mysql -e "create database xPLDatabase;" -u root
+  - ls /usr/bin
 
 install:
   - pip install --user git+git://github.com/eddyxu/cpp-coveralls.git
