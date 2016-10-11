@@ -432,6 +432,7 @@ bool TestxPLDatabase::MySQLGetDevices()
     ControlSockMock::SetNextRecv(msg);
 
     msg = ControlSockMock::GetLastSend(50);
+cout << "MSG : " << msg << endl;
     sch.Parse(msg);
 
     assert("fragxpl-onewire.test:temperaturems"==sch.GetValue("device", 0));
