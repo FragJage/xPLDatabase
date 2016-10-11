@@ -80,7 +80,6 @@ bool DbMysql::Write(const string& canonic, const string& value, const time_t tim
 
     str << "INSERT INTO capteurs (id, dateheure, valeur) ";
     str << "VALUES ('"<<canonic<<"', '"<<toSQLDate(time)<<"', '"<<value<<"')";
-cout << str.str() << endl;
     return Query(str.str());
 }
 
@@ -98,7 +97,6 @@ vector<string> DbMysql::RequestDevices(const time_t startTime, const time_t endT
 
     Connect();
 
-cout << str.str() << endl;
     if(!Query(str.str())) return ret;
 
     result = mysql_store_result(m_hCnx);
@@ -110,7 +108,7 @@ cout << str.str() << endl;
 
     Disconnect();
 
-cout << "OK" << endl;
+cout << "OK - " << ret.size() << " devices" << endl;
     return ret;
 }
 
@@ -128,7 +126,6 @@ vector<RequestValue> DbMysql::RequestValues(const string& canonic, const time_t 
 
     Connect();
 
-cout << str.str() << endl;
     if(!Query(str.str())) return ret;
 
     result = mysql_store_result(m_hCnx);
@@ -140,7 +137,7 @@ cout << str.str() << endl;
 
     Disconnect();
 
-cout << "OK" << endl;
+cout << "OK - " << ret.size() << " values" << endl;
     return ret;
 }
 
