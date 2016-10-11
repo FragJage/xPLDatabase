@@ -1,6 +1,3 @@
-#include <iostream>
-
-
 #include <cstdlib>
 #include <stdexcept>
 #include <iomanip>
@@ -363,7 +360,6 @@ bool xPLDatabase::CmndGetValuesNum(time_t tStart, time_t tEnd, int numberValue, 
             s.str("");
             sendValue.SetValue("min", vmin);
             sendValue.SetValue("max", vmax);
-cout << sendValue.ToMessage("vendor-src.default","vendor-target.default") << endl;
             m_xPLDevice.SendMessage(&sendValue, source);
         }
         tStart = tEnd+1;
@@ -423,7 +419,6 @@ bool xPLDatabase::CmndGetValuesBool(time_t tStart, time_t tEnd, int numberValue,
             s.str("");
             sendValue.SetValue("min", vmin);
             sendValue.SetValue("max", vmax);
-cout << sendValue.ToMessage("vendor-src.default","vendor-target.default") << endl;
             m_xPLDevice.SendMessage(&sendValue, source);
         }
         tStart = tEnd+1;
@@ -452,7 +447,6 @@ bool xPLDatabase::CmndGetValuesAlpha(int numberValue, const vector<RequestValue>
         i++;
         sendValue.SetValue("time", DateHelper::ToString(readIt->Time));
         sendValue.SetValue("value", readIt->Value);
-cout << sendValue.ToMessage("vendor-src.default","vendor-target.default") << endl;
         m_xPLDevice.SendMessage(&sendValue, source);
         ++readIt;
     }

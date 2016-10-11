@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <stdexcept>
 #include <ctime>
 #include <iomanip>
@@ -105,10 +103,8 @@ vector<string> DbMysql::RequestDevices(const time_t startTime, const time_t endT
         ret.emplace_back(row[0]);
 
     mysql_free_result(result);
-
     Disconnect();
 
-cout << "OK - " << ret.size() << " devices" << endl;
     return ret;
 }
 
@@ -134,10 +130,8 @@ vector<RequestValue> DbMysql::RequestValues(const string& canonic, const time_t 
         ret.emplace_back(DateHelper::ToDate(row[0]), row[1]);
 
     mysql_free_result(result);
-
     Disconnect();
 
-cout << "OK - " << ret.size() << " values" << endl;
     return ret;
 }
 
