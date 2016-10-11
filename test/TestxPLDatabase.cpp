@@ -274,7 +274,7 @@ bool TestxPLDatabase::GetValuesNum()
     msg = schData.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(50);
+    msg = ControlSockMock::GetLastSend(100);
     sch.Parse(msg);
     assert("25.4"==sch.GetValue("value"));
     assert("25"==sch.GetValue("min"));
@@ -284,7 +284,7 @@ bool TestxPLDatabase::GetValuesNum()
     msg = schData.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(50);
+    msg = ControlSockMock::GetLastSend(100);
     sch.Parse(msg);
     assert("25.4"==sch.GetValue("value"));
     assert("25"==sch.GetValue("min"));
@@ -305,7 +305,7 @@ bool TestxPLDatabase::GetValuesBool()
     msg = sch.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(50);
+    msg = ControlSockMock::GetLastSend(100);
     sch.Parse(msg);
     assert("1.0"==sch.GetValue("value"));
     assert("0"==sch.GetValue("min"));
@@ -327,11 +327,11 @@ bool TestxPLDatabase::GetValuesAlpha()
     msg = schData.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(50);
+    msg = ControlSockMock::GetLastSend(100);
     sch.Parse(msg);
     assert("loglogloglog0"==sch.GetValue("value"));
 
-    msg = ControlSockMock::GetLastSend(50);
+    msg = ControlSockMock::GetLastSend(100);
     sch.Parse(msg);
     assert("loglogloglog4"==sch.GetValue("value"));
 
@@ -431,7 +431,7 @@ bool TestxPLDatabase::MySQLGetDevices()
     msg = sch.ToMessage("fragxpl-test.default", "fragxpl-database.mysql");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(50);
+    msg = ControlSockMock::GetLastSend(500);
 cout << "MSG : " << msg << endl;
     sch.Parse(msg);
 
@@ -453,7 +453,7 @@ bool TestxPLDatabase::MySQLGetValues()
     msg = schData.ToMessage("fragxpl-test.default", "fragxpl-database.mysql");
     ControlSockMock::SetNextRecv(msg);
 
-    msg = ControlSockMock::GetLastSend(50);
+    msg = ControlSockMock::GetLastSend(100);
     sch.Parse(msg);
     assert("19.8"==sch.GetValue("value"));
     assert("19.8"==sch.GetValue("min"));
