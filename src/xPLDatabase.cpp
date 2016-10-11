@@ -334,7 +334,8 @@ bool xPLDatabase::CmndGetValuesNum(time_t tStart, time_t tEnd, int numberValue, 
 
     for(i=0; i<numberValue; i++)
     {
-         tEnd = tStart+ecart-1;
+        tEnd = tStart+ecart-1;
+        if(i==numberValue-1) tEnd++;
         nb=0;
         vcum=0;
         vmin=65535;
@@ -390,6 +391,7 @@ bool xPLDatabase::CmndGetValuesBool(time_t tStart, time_t tEnd, int numberValue,
     for(i=0; i<numberValue; i++)
     {
         tEnd = tStart+ecart-1;
+        if(i==numberValue-1) tEnd++;
         nb=0;
         vcum=0;
         vmin=2;
