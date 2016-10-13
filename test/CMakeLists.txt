@@ -105,6 +105,7 @@ add_executable(
   ../src/Filter.cpp
   ../src/RequestValue.cpp
   ControlSockMock.cpp
+  LogWriterMock.cpp
   SimpleSockMock.cpp
   TestCacheFile.cpp
   TestCacheMemory.cpp

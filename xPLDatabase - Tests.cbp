@@ -111,6 +111,8 @@
 		<Unit filename="src/xPLDatabase.h" />
 		<Unit filename="test/ControlSockMock.cpp" />
 		<Unit filename="test/ControlSockMock.h" />
+		<Unit filename="test/LogWriterMock.cpp" />
+		<Unit filename="test/LogWriterMock.h" />
 		<Unit filename="test/SimpleSockMock.cpp" />
 		<Unit filename="test/TestCacheFile.cpp" />
 		<Unit filename="test/TestCacheFile.h" />

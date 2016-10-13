@@ -85,6 +85,11 @@ void xPLDatabase::FlushDb()
     }
 }
 
+SimpleLog* xPLDatabase::GetLogHandle()
+{
+    return m_Log;
+}
+
 void xPLDatabase::Configure()
 {
     xPL::ConfigItem* pConfigItem;
@@ -133,7 +138,9 @@ void xPLDatabase::Configure()
         if(StringTools::IsEqualCaseInsensitive(dbType,"MYSQL"))
             m_DBDriver = new DbMysql(dbHost, dbPort, dbName, dbUser, m_dbPwd);
         else if(StringTools::IsEqualCaseInsensitive(dbType,"SQLITE"))
+        {
             m_DBDriver = new DbSqlite(dbName);
+        }
         else
             LOG_ERROR(m_Log) << "Unknown database type : " << dbType;
     }

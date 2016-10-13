@@ -33,6 +33,8 @@ class xPLDatabase : public Service::IService, public xPL::xPLDevice::IExtension,
 		void CloseDb();
 		void FlushDb();
 
+		SimpleLog* GetLogHandle();
+
     private:
         Filter* FilterFind(const string& source, const string& device);
         bool PersistanceAdd(std::string source, std::string device, std::string value);

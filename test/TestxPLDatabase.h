@@ -10,6 +10,7 @@
 #endif
 #include "../src/xPLDatabase.h"
 #include "ControlSockMock.h"
+#include "LogWriterMock.h"
 
 
 class TestxPLDatabase : public TestClass<TestxPLDatabase>
@@ -34,9 +35,12 @@ public:
     bool MySQLAddValues();
     bool MySQLGetDevices();
     bool MySQLGetValues();
+    bool LogError();
+    bool DirectInsert();
     bool DelAdvConfig();
     bool ReStop();
     xPLDatabase xPLDev;
+    LogWriterMock logWriterMock;
 private:
     void RemoveSqliteFile();
 };

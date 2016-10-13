@@ -5,6 +5,8 @@ using namespace std;
 
 TestxPLDatabase::TestxPLDatabase() : TestClass("xPLDatabase", this)
 {
+    SimpleLog* logger = xPLDev.GetLogHandle();
+    logger->SetWriter(&logWriterMock);
 	addTest("Start", &TestxPLDatabase::Start);
 	addTest("StdConfig", &TestxPLDatabase::StdConfig);
 	addTest("SetAdvConfig", &TestxPLDatabase::SetAdvConfig);
@@ -21,6 +23,8 @@ TestxPLDatabase::TestxPLDatabase() : TestClass("xPLDatabase", this)
     addTest("MySQLAddValues", &TestxPLDatabase::MySQLAddValues);
     addTest("MySQLGetDevices", &TestxPLDatabase::MySQLGetDevices);
     addTest("MySQLGetValues", &TestxPLDatabase::MySQLGetValues);
+    addTest("LogError", &TestxPLDatabase::LogError);
+    addTest("DirectInsert", &TestxPLDatabase::DirectInsert);
 	addTest("DelAdvConfig", &TestxPLDatabase::DelAdvConfig);
 	addTest("ReStop", &TestxPLDatabase::ReStop);
     RemoveSqliteFile();
@@ -457,6 +461,98 @@ bool TestxPLDatabase::MySQLGetValues()
     assert("19.8"==sch.GetValue("value"));
     assert("19.8"==sch.GetValue("min"));
     assert("19.8"==sch.GetValue("max"));
+
+    return true;
+}
+
+bool TestxPLDatabase::LogError()
+{
+    string msg;
+    xPL::SchemaObject sch;
+    xPL::SchemaObject schCfg(xPL::SchemaObject::cmnd, "config", "response");
+
+
+    schCfg.SetValue("memorycachesize", "");
+    schCfg.SetValue("filecachesize", "");
+    schCfg.SetValue("filecachename", "");
+    schCfg.SetValue("dbuser", "NOUSER");
+    schCfg.SetValue("dbpwd", "MOPASS");
+
+    schCfg.SetValue("dbtype", "MYSQL");
+    schCfg.SetValue("dbhost", "192.168.0.30");
+    schCfg.SetValue("dbport", "3306");
+    schCfg.SetValue("dbname", "NODB");
+    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
+    ControlSockMock::SetNextRecv(msg);
+
+    logWriterMock.WaitLog(50);
+    assert("ERROR"==logWriterMock.GetLastLevel());
+    assert("Configure"==logWriterMock.GetLastFunction());
+    assert("Unable to initialize database"==logWriterMock.GetLastMessage().substr(0,29));
+    msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
+
+    schCfg.SetValue("dbtype", "SQLITE");
+    schCfg.SetValue("dbhost", "");
+    schCfg.SetValue("dbport", "");
+    schCfg.SetValue("dbname", "/\\filename/\\");
+    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
+    ControlSockMock::SetNextRecv(msg);
+
+    logWriterMock.WaitLog(50);
+    assert("ERROR"==logWriterMock.GetLastLevel());
+    assert("Configure"==logWriterMock.GetLastFunction());
+    assert("Unable to initialize database"==logWriterMock.GetLastMessage().substr(0,29));
+    msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
+
+    schCfg.SetValue("dbtype", "MYSQLITEZZZ");
+    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
+    ControlSockMock::SetNextRecv(msg);
+
+    logWriterMock.WaitLog(50);
+    assert("ERROR"==logWriterMock.GetLastLevel());
+    assert("Configure"==logWriterMock.GetLastFunction());
+    assert("Unknown database type : 'MYSQLITEZZZ'"==logWriterMock.GetLastMessage());
+    msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
+
+    return true;
+}
+
+bool TestxPLDatabase::DirectInsert()
+{
+    string msg;
+    xPL::SchemaObject sch;
+    xPL::SchemaObject schCfg(xPL::SchemaObject::cmnd, "config", "response");
+    xPL::SchemaObject schSensor(xPL::ISchema::trig, "sensor", "basic");
+
+
+    schCfg.SetValue("memorycachesize", "");
+    schCfg.SetValue("filecachesize", "");
+    schCfg.SetValue("filecachename", "");
+    schCfg.SetValue("dbtype", "");
+    schCfg.SetValue("dbname", "");
+    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
+    ControlSockMock::SetNextRecv(msg);
+    msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
+
+    schSensor.SetValue("type", "output");
+    schSensor.SetValue("device", "tempheating");
+    schSensor.SetValue("current", "HIGH");
+    msg = schSensor.ToMessage("fragxpl-onewire.test", "*");
+    ControlSockMock::SetNextRecv(msg);
+    Plateforms::delay(150);
+
+    schCfg.SetValue("dbtype", "MYSQL");
+    schCfg.SetValue("dbport", "3306");
+    schCfg.SetValue("dbhost", "127.0.0.1");
+    schCfg.SetValue("dbname", "xPLDatabase");
+    schCfg.SetValue("dbuser", "root");
+    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
+    ControlSockMock::SetNextRecv(msg);
+    msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
+
+    msg = schSensor.ToMessage("fragxpl-onewire.test", "*");
+    ControlSockMock::SetNextRecv(msg);
+    Plateforms::delay(150);
 
     return true;
 }
