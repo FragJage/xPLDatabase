@@ -35,7 +35,9 @@ public:
     bool MySQLAddValues();
     bool MySQLGetDevices();
     bool MySQLGetValues();
-    bool LogError();
+    bool WrongDbType();
+    bool WrongSQLiteDb();
+    bool WrongMySQLDb();
     bool DirectInsert();
     bool DelAdvConfig();
     bool ReStop();

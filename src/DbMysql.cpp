@@ -34,7 +34,8 @@ DbMysql::~DbMysql()
 bool DbMysql::Connect()
 {
     bool ok=true;
-    MYSQL *hCnx;
+    MYSQL *hCnx=nullptr;
+
 
 	//Initialisation du gestionnaire de la connexion à la base de données mySQL
 	m_hCnx=mysql_init(nullptr);

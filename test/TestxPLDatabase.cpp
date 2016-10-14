@@ -1,3 +1,16 @@
+//#define LOCAL
+#ifdef LOCAL
+    #define DBHOST "192.168.0.30"
+    #define DBUSER "utest"
+    #define DBPASS "utest"
+    #define DBNAME "xPLTest"
+#else
+    #define DBHOST "localhost"
+    #define DBUSER "root"
+    #define DBPASS ""
+    #define DBNAME "xPLDatabase"
+#endif // LOCAL
+
 #include "TestxPLDatabase.h"
 #include "SimpleFolders/SimpleFolders.h"
 
@@ -23,7 +36,9 @@ TestxPLDatabase::TestxPLDatabase() : TestClass("xPLDatabase", this)
     addTest("MySQLAddValues", &TestxPLDatabase::MySQLAddValues);
     addTest("MySQLGetDevices", &TestxPLDatabase::MySQLGetDevices);
     addTest("MySQLGetValues", &TestxPLDatabase::MySQLGetValues);
-    addTest("LogError", &TestxPLDatabase::LogError);
+    addTest("WrongDbType", &TestxPLDatabase::WrongDbType);
+    addTest("WrongSQLiteDb", &TestxPLDatabase::WrongSQLiteDb);
+    addTest("WrongMySQLDb", &TestxPLDatabase::WrongMySQLDb);
     addTest("DirectInsert", &TestxPLDatabase::DirectInsert);
 	addTest("DelAdvConfig", &TestxPLDatabase::DelAdvConfig);
 	addTest("ReStop", &TestxPLDatabase::ReStop);
@@ -94,6 +109,9 @@ bool TestxPLDatabase::StdConfig()
     sch.Parse(msg);
     assert("30"==sch.GetValue("interval"));
     assert("fragxpl-database.test"==sch.GetSource());
+
+    logWriterMock.WaitLog(10);
+    assert(""==logWriterMock.GetLastLevel());
 
     msg = ControlSockMock::GetLastSend(10);
     sch.Parse(msg);
@@ -383,29 +401,28 @@ bool TestxPLDatabase::MySQLConfig()
     xPL::SchemaObject schCfg(xPL::SchemaObject::cmnd, "config", "response");
 
 
-    schCfg.SetValue("newconf", "mysql");
     schCfg.SetValue("interval", "29");
     schCfg.SetValue("memorycachesize", "1");
     schCfg.SetValue("filecachesize", "");
     schCfg.SetValue("filecachename", "");
     schCfg.SetValue("dbtype", "MYSQL");
     schCfg.SetValue("dbport", "3306");
-    schCfg.SetValue("dbhost", "127.0.0.1");
-    schCfg.SetValue("dbname", "xPLDatabase");
-    schCfg.SetValue("dbuser", "root");
+    schCfg.SetValue("dbhost", DBHOST);
+    schCfg.SetValue("dbname", DBNAME);
+    schCfg.SetValue("dbuser", DBUSER);
+    schCfg.SetValue("dbpwd", DBPASS);
 
     msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
-    msg = ControlSockMock::GetLastSend(10);     //Pass Hbeat message
-    msg = ControlSockMock::GetLastSend(10);
-    sch.Parse(msg);
-    assert("29"==sch.GetValue("interval"));
-    assert("fragxpl-database.mysql"==sch.GetSource());
+
     msg = ControlSockMock::GetLastSend(10);
     sch.Parse(msg);
     assert("sensor"==sch.GetClass());
     assert("request"==sch.GetType());
     assert("*"==sch.TargetAddress.ToString());
+
+    logWriterMock.WaitLog(10);
+    assert(""==logWriterMock.GetLastLevel());
 
     return true;
 }
@@ -432,7 +449,7 @@ bool TestxPLDatabase::MySQLGetDevices()
 
 
     sch.SetValue("command", "getdevices");
-    msg = sch.ToMessage("fragxpl-test.default", "fragxpl-database.mysql");
+    msg = sch.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
     msg = ControlSockMock::GetLastSend(500);
@@ -453,7 +470,7 @@ bool TestxPLDatabase::MySQLGetValues()
     schData.SetValue("command", "getvalues");
     schData.SetValue("device", "fragxpl-onewire.test:temperaturems");
     schData.SetValue("numbervalue", "1");
-    msg = schData.ToMessage("fragxpl-test.default", "fragxpl-database.mysql");
+    msg = schData.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
     msg = ControlSockMock::GetLastSend(100);
@@ -465,46 +482,18 @@ bool TestxPLDatabase::MySQLGetValues()
     return true;
 }
 
-bool TestxPLDatabase::LogError()
+bool TestxPLDatabase::WrongDbType()
 {
     string msg;
     xPL::SchemaObject sch;
     xPL::SchemaObject schCfg(xPL::SchemaObject::cmnd, "config", "response");
 
 
-    schCfg.SetValue("memorycachesize", "");
-    schCfg.SetValue("filecachesize", "");
-    schCfg.SetValue("filecachename", "");
-    schCfg.SetValue("dbuser", "NOUSER");
-    schCfg.SetValue("dbpwd", "MOPASS");
-
-    schCfg.SetValue("dbtype", "MYSQL");
-    schCfg.SetValue("dbhost", "192.168.0.30");
-    schCfg.SetValue("dbport", "3306");
-    schCfg.SetValue("dbname", "NODB");
-    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
-    ControlSockMock::SetNextRecv(msg);
-
-    logWriterMock.WaitLog(50);
-    assert("ERROR"==logWriterMock.GetLastLevel());
-    assert("Configure"==logWriterMock.GetLastFunction());
-    assert("Unable to initialize database"==logWriterMock.GetLastMessage().substr(0,29));
-    msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
-
-    schCfg.SetValue("dbtype", "SQLITE");
-    schCfg.SetValue("dbhost", "");
-    schCfg.SetValue("dbport", "");
-    schCfg.SetValue("dbname", "/\\filename/\\");
-    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
-    ControlSockMock::SetNextRecv(msg);
-
-    logWriterMock.WaitLog(50);
-    assert("ERROR"==logWriterMock.GetLastLevel());
-    assert("Configure"==logWriterMock.GetLastFunction());
-    assert("Unable to initialize database"==logWriterMock.GetLastMessage().substr(0,29));
-    msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
-
     schCfg.SetValue("dbtype", "MYSQLITEZZZ");
+    schCfg.SetValue("dbhost", "NOHOST");
+    schCfg.SetValue("dbname", "NODB");
+    schCfg.SetValue("dbuser", "NOUSER");
+    schCfg.SetValue("dbpwd", "NOPASS");
     msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
 
@@ -512,6 +501,57 @@ bool TestxPLDatabase::LogError()
     assert("ERROR"==logWriterMock.GetLastLevel());
     assert("Configure"==logWriterMock.GetLastFunction());
     assert("Unknown database type : 'MYSQLITEZZZ'"==logWriterMock.GetLastMessage());
+    msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
+
+    return true;
+}
+
+bool TestxPLDatabase::WrongSQLiteDb()
+{
+    string msg;
+    xPL::SchemaObject sch;
+    xPL::SchemaObject schCfg(xPL::SchemaObject::cmnd, "config", "response");
+
+
+    schCfg.SetValue("dbtype", "SQLITE");
+    schCfg.SetValue("dbhost", "");
+    schCfg.SetValue("dbport", "");
+    schCfg.SetValue("dbname", "/\\filename/\\");
+    schCfg.SetValue("dbuser", "NOUSER");
+    schCfg.SetValue("dbpwd", "NOPASS");
+    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
+    ControlSockMock::SetNextRecv(msg);
+
+    logWriterMock.WaitLog(50);
+    assert("ERROR"==logWriterMock.GetLastLevel());
+    assert("Configure"==logWriterMock.GetLastFunction());
+    assert("Unable to initialize database"==logWriterMock.GetLastMessage().substr(0,29));
+    msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
+
+    return true;
+}
+
+bool TestxPLDatabase::WrongMySQLDb()
+{
+    string msg;
+    xPL::SchemaObject sch;
+    xPL::SchemaObject schCfg(xPL::SchemaObject::cmnd, "config", "response");
+
+
+    schCfg.SetValue("dbtype", "MYSQL");
+    schCfg.SetValue("dbhost", DBHOST);
+    schCfg.SetValue("dbport", "3306");
+    schCfg.SetValue("dbname", "NODB");
+    schCfg.SetValue("dbuser", "NOUSER");
+    schCfg.SetValue("dbpwd", "NOPASS");
+
+    msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
+    ControlSockMock::SetNextRecv(msg);
+
+    logWriterMock.WaitLog(50);
+    assert("ERROR"==logWriterMock.GetLastLevel());
+    assert("Configure"==logWriterMock.GetLastFunction());
+    assert("Unable to initialize database"==logWriterMock.GetLastMessage().substr(0,29));
     msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
 
     return true;
@@ -543,9 +583,10 @@ bool TestxPLDatabase::DirectInsert()
 
     schCfg.SetValue("dbtype", "MYSQL");
     schCfg.SetValue("dbport", "3306");
-    schCfg.SetValue("dbhost", "127.0.0.1");
-    schCfg.SetValue("dbname", "xPLDatabase");
-    schCfg.SetValue("dbuser", "root");
+    schCfg.SetValue("dbhost", DBHOST);
+    schCfg.SetValue("dbname", DBNAME);
+    schCfg.SetValue("dbuser", DBUSER);
+    schCfg.SetValue("dbpwd", DBPASS);
     msg = schCfg.ToMessage("fragxpl-test.default", "fragxpl-database.test");
     ControlSockMock::SetNextRecv(msg);
     msg = ControlSockMock::GetLastSend(10);     //Pass sensor request
