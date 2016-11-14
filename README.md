@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/FragJage/xPLDatabase.svg?branch=master)](https://travis-ci.org/FragJage/xPLDatabase)
-[![Coverage Status](https://coveralls.io/repos/github/FragJage/xPLDatabase/badge.svg?branch=master)](https://coveralls.io/github/FragJage/xPLDatabase?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/FragJage/xPLDatabase/badge.svg?branch=master&bust=1)](https://coveralls.io/github/FragJage/xPLDatabase?branch=master)
 [![Coverity Scan Build](https://scan.coverity.com/projects/10420/badge.svg)](https://scan.coverity.com/projects/10420)
 xPLDatabase
 ===========

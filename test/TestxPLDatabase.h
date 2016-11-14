@@ -44,5 +44,5 @@ public:
     xPLDatabase xPLDev;
     LogWriterMock logWriterMock;
 private:
-    void RemoveSqliteFile();
+    void RemoveFiles(bool isError);
 };

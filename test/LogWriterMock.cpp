@@ -2,7 +2,7 @@
 #include "Plateforms/Plateforms.h"
 
 using namespace std;
-LogWriterMock::LogWriterMock()
+LogWriterMock::LogWriterMock() : m_MockMutex(), m_level(), m_message(), m_module(), m_line(), m_function()
 {
 }
 

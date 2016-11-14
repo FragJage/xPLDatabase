@@ -42,23 +42,34 @@ TestxPLDatabase::TestxPLDatabase() : TestClass("xPLDatabase", this)
     addTest("DirectInsert", &TestxPLDatabase::DirectInsert);
 	addTest("DelAdvConfig", &TestxPLDatabase::DelAdvConfig);
 	addTest("ReStop", &TestxPLDatabase::ReStop);
-    RemoveSqliteFile();
+    RemoveFiles(true);
 }
 
 TestxPLDatabase::~TestxPLDatabase()
 {
-    RemoveSqliteFile();
+    RemoveFiles(false);
 }
 
-void TestxPLDatabase::RemoveSqliteFile()
+void TestxPLDatabase::RemoveFiles(bool isStarting)
 {
+    int result;
     string dbName;
     string configFolder;
     SimpleFolders   sqliteFile;
 
     configFolder = SimpleFolders::GetFolder(SimpleFolders::FolderType::User)+".fragxpl";
     dbName = sqliteFile.AddFile(configFolder, "xPLDatabase.db");
-    remove(dbName.c_str());
+    result = remove(dbName.c_str());
+    if((isStarting)&&(result==0))
+        cout << termcolor::yellow << "Remove old database file" << endl << termcolor::grey;
+    if((!isStarting)&&(result!=0))
+        cout << termcolor::red << "Unable to remove database file" << endl << termcolor::grey;
+
+    result = remove("config");
+    if((isStarting)&&(result==0))
+        cout << termcolor::yellow << "Remove old config file" << endl << termcolor::grey;
+    if((!isStarting)&&(result!=0))
+        cout << termcolor::red << "Unable to remove config file" << endl << termcolor::grey;
 }
 
 void TestxPLDatabase::ThreadStart(xPLDatabase* pxPLDev)
@@ -632,7 +643,6 @@ bool TestxPLDatabase::ReStop()
     assert("end"==sch.GetType());
     Plateforms::delay(200);
 
-    remove("config");
     return true;
 }
 

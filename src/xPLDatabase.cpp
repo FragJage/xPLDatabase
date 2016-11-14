@@ -414,7 +414,7 @@ bool xPLDatabase::CmndGetValuesBool(time_t tStart, time_t tEnd, int numberValue,
 
         if(nb>0)
         {
-            if(vcum>nb/2)
+            if(vcum>(int)(nb/2))
                 vcum = 1;
             else
                 vcum = 0;
