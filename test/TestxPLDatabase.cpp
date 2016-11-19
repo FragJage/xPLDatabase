@@ -88,8 +88,6 @@ bool TestxPLDatabase::Start()
     string msg;
     xPL::SchemaObject sch;
 
-    remove("config");
-
     thread integrationTest(ThreadStart, &xPLDev);
     integrationTest.detach();
 
