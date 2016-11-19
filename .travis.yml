@@ -26,7 +26,7 @@ addons:
       name: "FragJage/xPLDatabase"
       description: "Log xPL message values into a database"
     notification_email: inscrip.jage@free.fr
-    build_command_prepend: "cov-configure --gcc --comptype g++ --compiler $(which $COMPILER) && cmake . -G'Unix Makefiles' -DCMAKE_CXX_COMPILER=$(which $COMPILER)"
+    build_command_prepend: "cov-configure --template --comptype g++ --compiler $COMPILER && cmake . -G'Unix Makefiles' -DCMAKE_CXX_COMPILER=$(which $COMPILER)"
     build_command: "make"
     branch_pattern: coverity_branch
     
